@@ -6,10 +6,12 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 50.times do 
-    Company.create(
-        name: Faker::Sports::Football.team,
+    company = Company.new(    
+        name: Faker::Company.name,
         nit: Faker::Number.number(digits: 10),
         address: Faker::Address.full_address,
         phone_number: Faker::Number.number(digits: 10)
     )
+
+    company.save if company.valid?
 end

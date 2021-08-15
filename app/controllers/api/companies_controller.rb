@@ -1,6 +1,5 @@
-class Api::CompaniesController < ApplicationController
-  before_action       :get_company, only: [:show, :update]
-  skip_before_action  :verify_authenticity_token, only: [:create]
+class Api::CompaniesController < Api::BaseController
+  before_action       :get_company, only: [:show, :update, :destroy] 
 
   def index
     companies = Company.all
@@ -8,16 +7,21 @@ class Api::CompaniesController < ApplicationController
   end
 
   def show
-    render json: @company.as_json(only: company_attributes)
+      render json: @company.as_json(only: company_attributes)
   end
 
   def create
     company = Company.new(company_params)
-    if company.save
-      render json: company.as_json(only: company_attributes)
-    else
-      render json: {"message": "error"}
-    end
+   
+    render json: company.as_json(only: company_attributes)  if company.save!
+  end
+
+  def update
+    render json: @company.as_json(only: company_attributes) if @company.update!(company_params)
+  end
+
+  def destroy
+    render json: @company.as_json(only: company_attributes) if @company.destroy!
   end
 
   private
@@ -31,7 +35,7 @@ class Api::CompaniesController < ApplicationController
   end
 
   def get_company
-    @company = Company.find(params[:id])
+    @company = Company.find(params[:id])    
   end
   
 end
