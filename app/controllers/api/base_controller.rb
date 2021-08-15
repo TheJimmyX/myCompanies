@@ -1,8 +1,7 @@
 class Api::BaseController < ActionController::Base
     skip_before_action  :verify_authenticity_token, only: [:create, :update, :destroy]
     rescue_from ActiveRecord::RecordNotFound, with: :handle_error
-    rescue_from ActiveRecord::RecordInvalid, with: :record_invalid
-    
+    rescue_from ActiveRecord::RecordInvalid, with: :record_invalid    
 
     private
 

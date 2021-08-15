@@ -1,5 +1,5 @@
 class Api::CompaniesController < Api::BaseController
-  before_action       :get_company, only: [:show, :update, :destroy] 
+  before_action :get_company, only: [:show, :update, :destroy] 
 
   def index
     companies = Company.all
@@ -7,7 +7,7 @@ class Api::CompaniesController < Api::BaseController
   end
 
   def show
-      render json: @company.as_json(only: company_attributes)
+      render json: @company.as_json(only: company_attributes, include: :employes)
   end
 
   def create
