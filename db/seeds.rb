@@ -14,4 +14,21 @@
     )
 
     company.save if company.valid?
+
+    15.times do
+        fn = Faker::Name.first_name
+        ln = Faker::Name.last_name
+
+        employe = Employe.new(
+            first_name: fn,
+            last_name: ln,
+            id_type: "CC", 
+            id_number: Faker::Number.number(digits: 12), 
+            phone_number: Faker::Number.number(digits: 10), 
+            email: "#{fn}.#{ln}@#{company.name.delete(' ').delete(',')}.com".downcase,
+            company_id: company.id
+        )
+
+        employe.save if employe.valid?
+    end
 end

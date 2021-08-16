@@ -1,6 +1,8 @@
-Rails.application.routes.draw do
+Rails.application.routes.draw do  
   namespace :api do
     resources :companies, only: [:index, :show, :create, :update, :destroy]
+    resources :employes,  only: [:index, :show, :create, :update, :destroy]
+
+    get '/companies/:id/employes',  to: 'companies#employes'
   end
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
