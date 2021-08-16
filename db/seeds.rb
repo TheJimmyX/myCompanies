@@ -25,7 +25,7 @@
             id_type: "CC", 
             id_number: Faker::Number.number(digits: 12), 
             phone_number: Faker::Number.number(digits: 10), 
-            email: "#{fn}.#{ln}@#{company.name}.com".delete(' ', ',').downcase,
+            email: "#{fn}.#{ln}@#{company.name.delete(' ').delete(',')}.com".downcase,
             company_id: company.id
         )
 

@@ -1,5 +1,5 @@
 class Api::CompaniesController < Api::BaseController
-  before_action :get_company, only: [:show, :update, :destroy] 
+  before_action :get_company, only: [:show, :update, :destroy, :employes]
 
   def index
     companies = Company.all
@@ -7,7 +7,7 @@ class Api::CompaniesController < Api::BaseController
   end
 
   def show
-      render json: @company.as_json(only: company_attributes, include: :employes)
+      render json: @company.as_json(only: company_attributes)
   end
 
   def create
@@ -22,6 +22,11 @@ class Api::CompaniesController < Api::BaseController
 
   def destroy
     render json: @company.as_json(only: company_attributes) if @company.destroy!
+  end
+  
+
+  def employes
+    render json: @company.as_json(only: [:name], include: { employes: { only: [:first_name, :last_name, :id_type, :id_number, :phone_number, :email]} })
   end
 
   private
