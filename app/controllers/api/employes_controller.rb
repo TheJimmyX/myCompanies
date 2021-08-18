@@ -2,7 +2,7 @@ class Api::EmployesController < Api::BaseController
   before_action :get_employe, only: [:show, :update, :destroy]   
 
   def index
-    employes = Employe.all
+    @pagy, employes = pagy(Employe.all)
 
     render json: employes.as_json(only: employes_attributes, include: :company)
   end
