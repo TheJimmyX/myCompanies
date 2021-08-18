@@ -2,7 +2,9 @@ class Api::CompaniesController < Api::BaseController
   before_action :get_company, only: [:show, :update, :destroy, :employes]
 
   def index
-    companies = Company.all
+    @pagy, companies = pagy(Company.all)
+    # companies = Company.all
+    
     render json: companies.as_json(only: company_attributes)
   end
 
@@ -26,13 +28,18 @@ class Api::CompaniesController < Api::BaseController
   
 
   def employes
-    render json: @company.as_json(only: [:name], include: { employes: { only: [:first_name, :last_name, :id_type, :id_number, :phone_number, :email]} })
+    @pagy, employes = pagy(@company.employes)
+    render json: employes.as_json(only: employe_attributes, include: { company: { only: :name}})
   end
 
   private
 
   def company_attributes
     [:id, :name, :address, :nit, :phone_number]
+  end
+
+  def employe_attributes
+    [:first_name, :last_name, :id_type, :id_number, :phone_number, :email]
   end
 
   def company_params
