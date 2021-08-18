@@ -11,3 +11,14 @@ import "channels"
 Rails.start()
 Turbolinks.start()
 ActiveStorage.start()
+
+import "bootstrap"
+import "../stylesheets/application"
+
+var jQuery = require('jquery')
+
+import "datatables.net"
+import "datatables.net-dt"
+
+global.$ = global.jQuery = jQuery
+window.$ = window.jQuery = jQuery

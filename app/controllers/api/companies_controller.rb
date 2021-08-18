@@ -1,23 +1,35 @@
-class Api::CompaniesController < ApplicationController
-  before_action       :get_company, only: [:show, :update]
-  skip_before_action  :verify_authenticity_token, only: [:create]
+class Api::CompaniesController < Api::BaseController
+  before_action :get_company, only: [:show, :update, :destroy, :employes]
 
   def index
-    companies = Company.all
+    @pagy, companies = pagy(Company.all)
+    # companies = Company.all
+    
     render json: companies.as_json(only: company_attributes)
   end
 
   def show
-    render json: @company.as_json(only: company_attributes)
+      render json: @company.as_json(only: company_attributes)
   end
 
   def create
     company = Company.new(company_params)
-    if company.save
-      render json: company.as_json(only: company_attributes)
-    else
-      render json: {"message": "error"}
-    end
+   
+    render json: company.as_json(only: company_attributes)  if company.save!
+  end
+
+  def update
+    render json: @company.as_json(only: company_attributes) if @company.update!(company_params)
+  end
+
+  def destroy
+    render json: @company.as_json(only: company_attributes) if @company.destroy!
+  end
+  
+
+  def employes
+    @pagy, employes = pagy(@company.employes)
+    render json: employes.as_json(only: employe_attributes, include: { company: { only: :name}})
   end
 
   private
@@ -26,12 +38,16 @@ class Api::CompaniesController < ApplicationController
     [:id, :name, :address, :nit, :phone_number]
   end
 
+  def employe_attributes
+    [:first_name, :last_name, :id_type, :id_number, :phone_number, :email]
+  end
+
   def company_params
     params.require(:company).permit(:name, :nit, :address, :phone_number)
   end
 
   def get_company
-    @company = Company.find(params[:id])
+    @company = Company.find(params[:id])    
   end
   
 end
