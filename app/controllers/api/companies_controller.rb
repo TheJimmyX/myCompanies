@@ -2,9 +2,12 @@ class Api::CompaniesController < Api::BaseController
   before_action :get_company, only: [:show, :update, :destroy, :employes]
 
   def index
-    @pagy, companies = pagy(Company.all)
-    # companies = Company.all
-    
+    @pagy, companies = pagy(
+      !params[:search] || params[:search].empty? || params[:search] == "null" ? 
+        Company.all :         
+        Company.where("name LIKE ? OR nit LIKE ? OR address LIKE ? OR phone_number LIKE ?", "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%", "%#{params[:search]}%")        
+    )
+
     render json: companies.as_json(only: company_attributes)
   end
 

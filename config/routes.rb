@@ -5,5 +5,10 @@ Rails.application.routes.draw do
     
     get '/companies/:id/employes',  to: 'companies#employes'
   end
+  
   root 'companies#index'
+
+
+  # companies ctrl
+  get '/companies/:id', to: 'companies#edit'
 end
